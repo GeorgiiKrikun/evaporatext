@@ -7,6 +7,8 @@ use dioxus::prelude::*;
 use gloo_timers::future::TimeoutFuture;
 use wasm_bindgen_futures::JsFuture;
 
+mod text_removal;
+
 const CSS: Asset = asset!("assets/main.css");
 
 fn main() {

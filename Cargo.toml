@@ -12,6 +12,7 @@ dioxus = { version = "0.6.0", features = ["router"] }
 wasm-bindgen-futures = "0.4"
 web-sys = { version = "0.3", features = ["Clipboard", "Navigator", "Window"] }
 gloo-timers = { version = "0.3", features = ["futures"] }
+regex = "1.11.2"
 
 [features]
 default = ["web"]
