@@ -139,6 +139,7 @@ pub fn extract_secret(message: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest::rstest;
 
     #[test]
     fn assert_correct_size() {
@@ -197,4 +198,34 @@ mod tests {
         let extracted = extract_secret(&message).expect("Extraction failed");
         assert_eq!(secret, extracted);
     }
+
+    #[rstest]
+    fn test_all_combinations(
+        #[values(
+            "Hello", "secret123", "A quick brown fox.", "!@#$%^&*()_+",
+            "你好世界", "Rustacean 🦀", "Привет", "δοκιμή",
+            "", " ", "\n\t",
+            "a-very-long-string-that-tests-buffer-handling-and-other-edge-cases",
+            "another-similarly-long-string-to-ensure-no-static-assumptions-are-made",
+            "Text with 123 and some Cyrillic: Привет", "你好 with some emoji 😃 and numbers 456",
+            "json-like:{'key':'value'}", "<html><body>test</body></html>", "a final test string"
+        )] 
+        base: &str,
+        #[values(
+            "Hello", "secret123", "A quick brown fox.", "!@#$%^&*()_+",
+            "你好世界", "Rustacean 🦀", "Привет", "δοκιμή",
+            "", " ", "\n\t",
+            "a-very-long-string-that-tests-buffer-handling-and-other-edge-cases",
+            "another-similarly-long-string-to-ensure-no-static-assumptions-are-made",
+            "Text with 123 and some Cyrillic: Привет", "你好 with some emoji 😃 and numbers 456",
+            "json-like:{'key':'value'}", "<html><body>test</body></html>", "a final test string"
+        )] secret: &str
+    ) {
+        // The test logic remains the same
+        let message = create_secret(base, secret);
+        let extracted = extract_secret(&message).expect("Extraction failed");
+        assert_eq!(secret, extracted);
+    }
+
+
 }
