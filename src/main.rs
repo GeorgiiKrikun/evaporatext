@@ -9,7 +9,8 @@ use wasm_bindgen_futures::JsFuture;
 
 mod text_removal;
 
-const CSS: Asset = asset!("assets/main.css");
+const CONTAINER_CSS: Asset = asset!("assets/main.css");
+const NAVBAR_CSS: Asset = asset!("assets/navbar.css");
 
 fn main() {
     // Launch the web application
@@ -18,51 +19,64 @@ fn main() {
 
 // Define the main App component
 fn App() -> Element {
-    // State for the visible text input
-    let mut visible_text = use_signal(|| String::new());
-    // State for the hidden text input
-    let mut hidden_text = use_signal(|| String::new());
-    // State for the copy button's label to provide user feedback
-    let mut copy_button_text = use_signal(|| "Copy".to_string());
+    let mut current_page = use_signal(|| "combine".to_string());
 
+    rsx! {
+        document::Stylesheet { href: CONTAINER_CSS }
+        document::Stylesheet { href: NAVBAR_CSS }
+        div {
+            class: "navbar-split",
+            div {
+                class: "navbar-container",
+                button {
+                    onclick: move |_| current_page.set("combine".to_string()),
+                    "Hide"
+                }
+                button {
+                    onclick: move |_| current_page.set("split".to_string()),
+                    "Reveal"
+                }
+            }
+            div { class: "page-container",
+                // h1 { "Dioxus Input and Copyable Output" }
+                if current_page.cloned() == "combine" {
+                    CombinePage {}
+                } else {
+                    SplitPage {}
+                }
+            }
+        }
+    }
+}
+
+fn CombinePage() -> Element {
+    let mut visible_text = use_signal(|| String::from("Hello, World!"));
+    let mut hidden_text = use_signal(|| String::from("Hidden text"));
+    let mut copy_button_text = use_signal(|| "Copy".to_string());
 
     let visible = visible_text.cloned();
     let hidden = hidden_text.cloned();
-    // A derived string that combines the two inputs for the output area
     let output_text = text_removal::create_secret(&visible, &hidden);
 
     rsx! {
-        // Simple styling for layout and appearance
-        document::Stylesheet { href: CSS }
-        // Main application container
-        div { class: "container",
-            h1 { "Dioxus Input and Copyable Output" }
-
-            // Group for the first text input
+        div { class: "widget-container",
             div { class: "input-group",
                 label { "Visible Text Input" }
                 input {
                     r#type: "text",
                     placeholder: "Enter some text here...",
-                    // Update the `visible_text` signal on every input event
                     oninput: move |event| visible_text.set(event.value())
                 }
             }
-
-            // Group for the "hidden" (password) text input
             div { class: "input-group",
                 label { "Hidden Text Input" }
                 input {
                     r#type: "text",
                     placeholder: "Enter secret text here...",
-                    // Update the `hidden_text` signal on every input event
                     oninput: move |event| hidden_text.set(event.value())
                 }
             }
-
-            // The output area which is read-only
             div { class: "pre-wrapper",
-                // `pre` tag is used to preserve formatting, like newlines
                 pre { "{output_text}" }
                 button {
                     onclick: move |_| {
@@ -84,6 +98,36 @@ fn App() -> Element {
                     },
                     "{copy_button_text}"
                 }
+            }
+        }
+    }
+}
+
+fn SplitPage() -> Element {
+    let mut combined_text = use_signal(|| String::new());
+    let mut hidden_text = use_signal(|| String::new());
+
+    let combined = combined_text.cloned();
+    let hidden = text_removal::extract_secret(&combined);
+
+    match hidden {
+        Some(secret) => hidden_text.set(secret),
+        None => hidden_text.set("No hidden text found.".to_string()),
+    }
+
+    rsx! {
+        div { class: "widget-container",
+            div { class: "input-group",
+                label { "Combined Text Input" }
+                input {
+                    r#type: "text",
+                    placeholder: "Enter combined text here...",
+                    oninput: move |event| combined_text.set(event.value())
+                }
+            }
+            div { class: "output-container",
+                label { "Hidden Text Output" }
+                pre { "{hidden_text}" }
             }
         }
     }

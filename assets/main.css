@@ -2,8 +2,15 @@ body {
     font-family: sans-serif;
     background-color: #f0f2f5;
     color: #1c1e21;
+    margin: 0;
 }
-.container {
+
+.navbar-split {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 2rem;
@@ -11,15 +18,22 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+.widget-container {
+    min-width: 600px;
+}
+
 .input-group {
     margin-bottom: 1.5rem;
 }
+
 label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
     color: #606770;
 }
+
 input {
     width: 100%;
     padding: 0.75rem;
@@ -28,10 +42,12 @@ input {
     box-sizing: border-box; /* Ensures padding doesn't affect width */
     font-size: 1rem;
 }
+
 .output-container {
     margin-top: 2rem;
     position: relative;
 }
+
 pre {
     background-color: #e9ebee;
     padding: 1rem;
@@ -41,10 +57,12 @@ pre {
     color: #333;
     min-height: 60px;
 }
+
 .pre-wrapper {
     position: relative;
 }
-button {
+
+.widget-container button {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -57,6 +75,8 @@ button {
     cursor: pointer;
     transition: background-color 0.2s;
 }
-button:hover {
+
+.widget-container button:hover {
     background-color: #0056b3;
 }
+

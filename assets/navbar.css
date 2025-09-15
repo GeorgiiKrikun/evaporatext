@@ -1,0 +1,15 @@
+.navbar-container {
+    display: flex;
+    flex-direction: row;
+    background-color: #555555;
+}
+
+.navbar-container button {
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar-container button:hover {
+  background-color: #ffffff;
+}
+
