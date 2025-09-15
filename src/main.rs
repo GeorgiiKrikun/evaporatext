@@ -17,9 +17,16 @@ fn main() {
     launch(App);
 }
 
+enum Page {
+    Combine,
+    Split,
+}
+
 // Define the main App component
 fn App() -> Element {
     let mut current_page = use_signal(|| "combine".to_string());
+    let button_hide_class = if current_page.cloned() == "combine" { "active" } else { "" };
+    let button_reveal_class = if current_page.cloned() == "split" { "active" } else { "" };
 
     rsx! {
         document::Stylesheet { href: CONTAINER_CSS }
@@ -29,10 +36,12 @@ fn App() -> Element {
             div {
                 class: "navbar-container",
                 button {
+                    class: button_hide_class,
                     onclick: move |_| current_page.set("combine".to_string()),
                     "Hide"
                 }
                 button {
+                    class: button_reveal_class,
                     onclick: move |_| current_page.set("split".to_string()),
                     "Reveal"
                 }

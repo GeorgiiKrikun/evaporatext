@@ -1,15 +1,41 @@
+/* === REVISED SLEEK DARK NAVBAR === */
+
 .navbar-container {
     display: flex;
     flex-direction: row;
-    background-color: #555555;
+    background-color: #1c1e21; /* The dark background remains */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1rem; /* Added a bit of vertical padding */
+    align-items: center;
 }
 
 .navbar-container button {
-  padding: 14px 16px;
-  text-decoration: none;
+    background: none; /* We will override this for active/hover */
+    border: none;
+    border-radius: 6px; /* Add rounded corners to define the button shape */
+    padding: 0.75rem 1.25rem; /* Adjusted padding for the pill shape */
+    font-size: 0.95rem; /* Slightly smaller font can look cleaner in pills */
+    font-weight: bold;
+    font-family: sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    cursor: pointer;
+    
+    /* Remove the bottom border as we'll use background color instead */
+    /* border-bottom: 3px solid transparent; */
+
+    /* Smooth transition for background and color changes */
+    transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
 .navbar-container button:hover {
-  background-color: #ffffff;
+    color: #ffffff; /* Text becomes full white */
+    background-color: rgba(255, 255, 255, 0.1); /* Add a subtle background on hover */
 }
 
+/* Style for the currently active page link */
+.navbar-container button.active {
+    color: #007bff; /* Active link text is your primary blue */
+    background-color: #e9ebee; /* Use the light grey from your <pre> tag for a standout active state */
+    font-weight: bold;
+}
