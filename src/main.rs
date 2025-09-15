@@ -12,59 +12,61 @@ mod text_removal;
 const CONTAINER_CSS: Asset = asset!("assets/main.css");
 const NAVBAR_CSS: Asset = asset!("assets/navbar.css");
 
+#[derive(Routable, Clone, PartialEq)]
+enum Route {
+    #[layout(Navbar)]
+        #[route("/hide")]
+        Hide,
+        #[route("/seek")]
+        Seek, 
+        // #[route("/")]
+        // #[redirect("/", || Route::Hide {} )]
+    #[end_layout]
+    #[route("/:..route")]
+    PageNotFound { route: Vec<String> },
+}
+
 fn main() {
     // Launch the web application
     launch(App);
 }
 
-#[derive(Clone, PartialEq)]
-enum Page {
-    Combine,
-    Split,
-}
-
 // Define the main App component
+#[component]
 fn App() -> Element {
-    let mut current_page = use_signal(|| Page::Combine);
-    let button_hide_class = match current_page.cloned() {
-        Page::Combine => "active",
-        Page::Split => "",
-    };
-    let button_reveal_class = match current_page.cloned() {
-        Page::Combine => "",
-        Page::Split => "active",
-    };
-
     rsx! {
         document::Stylesheet { href: CONTAINER_CSS }
         document::Stylesheet { href: NAVBAR_CSS }
+        Router::<Route> {}
+    }
+}
+
+#[component]
+fn Navbar() -> Element {
+    rsx! {
         div {
             class: "navbar-split",
-            div {
-                class: "navbar-container",
-                button {
-                    class: button_hide_class,
-                    onclick: move |_| current_page.set(Page::Combine),
+            div { class: "navbar-container",
+                Link {
+                    to: Route::Hide,
+                    active_class: "active",
                     "Hide"
                 }
-                button {
-                    class: button_reveal_class,
-                    onclick: move |_| current_page.set(Page::Split),
-                    "Reveal"
+                Link {
+                    to: Route::Seek,
+                    active_class: "active",
+                    "Seek"
                 }
             }
             div { class: "page-container",
-                if current_page.cloned() == Page::Combine {
-                    CombinePage {}
-                } else {
-                    SplitPage {}
-                }
+                Outlet::<Route> {}
             }
         }
     }
 }
 
-fn CombinePage() -> Element {
+#[component]
+fn Hide() -> Element {
     let mut visible_text = use_signal(|| String::from("Hello, World!"));
     let mut hidden_text = use_signal(|| String::from("Hidden text"));
     let mut copy_button_text = use_signal(|| "Copy".to_string());
@@ -118,7 +120,8 @@ fn CombinePage() -> Element {
     }
 }
 
-fn SplitPage() -> Element {
+#[component]
+fn Seek() -> Element {
     let mut combined_text = use_signal(|| String::new());
     let mut hidden_text = use_signal(|| String::new());
 
@@ -146,4 +149,15 @@ fn SplitPage() -> Element {
             }
         }
     }
+}
+
+#[component]
+fn PageNotFound(route: Vec<String>) -> Element {
+    let navigator = use_navigator();
+    use_effect(move || {
+        navigator.replace(Route::Hide);
+    });
+
+    // This component renders nothing, as it's only job is to trigger the redirect.
+    rsx! {}
 }

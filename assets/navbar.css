@@ -9,7 +9,7 @@
     align-items: center;
 }
 
-.navbar-container button {
+.navbar-container a {
     background: none; /* We will override this for active/hover */
     border: none;
     border-radius: 6px; /* Add rounded corners to define the button shape */
@@ -28,13 +28,13 @@
     transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-.navbar-container button:hover {
+.navbar-container a:hover {
     color: #ffffff; /* Text becomes full white */
     background-color: rgba(255, 255, 255, 0.1); /* Add a subtle background on hover */
 }
 
 /* Style for the currently active page link */
-.navbar-container button.active {
+.navbar-container a.active {
     color: #007bff; /* Active link text is your primary blue */
     background-color: #e9ebee; /* Use the light grey from your <pre> tag for a standout active state */
     font-weight: bold;
