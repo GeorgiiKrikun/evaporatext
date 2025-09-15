@@ -17,6 +17,7 @@ fn main() {
     launch(App);
 }
 
+#[derive(Clone, PartialEq)]
 enum Page {
     Combine,
     Split,
@@ -24,9 +25,15 @@ enum Page {
 
 // Define the main App component
 fn App() -> Element {
-    let mut current_page = use_signal(|| "combine".to_string());
-    let button_hide_class = if current_page.cloned() == "combine" { "active" } else { "" };
-    let button_reveal_class = if current_page.cloned() == "split" { "active" } else { "" };
+    let mut current_page = use_signal(|| Page::Combine);
+    let button_hide_class = match current_page.cloned() {
+        Page::Combine => "active",
+        Page::Split => "",
+    };
+    let button_reveal_class = match current_page.cloned() {
+        Page::Combine => "",
+        Page::Split => "active",
+    };
 
     rsx! {
         document::Stylesheet { href: CONTAINER_CSS }
@@ -37,18 +44,17 @@ fn App() -> Element {
                 class: "navbar-container",
                 button {
                     class: button_hide_class,
-                    onclick: move |_| current_page.set("combine".to_string()),
+                    onclick: move |_| current_page.set(Page::Combine),
                     "Hide"
                 }
                 button {
                     class: button_reveal_class,
-                    onclick: move |_| current_page.set("split".to_string()),
+                    onclick: move |_| current_page.set(Page::Split),
                     "Reveal"
                 }
             }
             div { class: "page-container",
-                // h1 { "Dioxus Input and Copyable Output" }
-                if current_page.cloned() == "combine" {
+                if current_page.cloned() == Page::Combine {
                     CombinePage {}
                 } else {
                     SplitPage {}
