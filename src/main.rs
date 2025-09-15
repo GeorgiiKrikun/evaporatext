@@ -25,12 +25,11 @@ fn App() -> Element {
     // State for the copy button's label to provide user feedback
     let mut copy_button_text = use_signal(|| "Copy".to_string());
 
+
+    let visible = visible_text.cloned();
+    let hidden = hidden_text.cloned();
     // A derived string that combines the two inputs for the output area
-    let output_text = format!(
-        "Visible Text: \"{}\"\nHidden Text: \"{}\"",
-        visible_text(),
-        hidden_text()
-    );
+    let output_text = text_removal::create_secret(&visible, &hidden);
 
     rsx! {
         // Simple styling for layout and appearance
