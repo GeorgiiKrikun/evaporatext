@@ -19,3 +19,9 @@ script = []
 # Javascript code file
 # serve: [dev-server] only
 script = []
+
+
+[bundle]
+identifier="goglike.goglikestudios"
+publisher="Georgii Krikun"
+icon=["/home/georgii/software/dioxus-test/evaporate/assets/happy.png"]
