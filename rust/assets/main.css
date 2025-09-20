@@ -5,10 +5,6 @@ body {
     margin: 0;
 }
 
-.navbar-split {
-    display: flex;
-    flex-direction: column;
-}
 
 .page-container {
     max-width: 600px;
