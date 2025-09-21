@@ -1,2 +1,3 @@
 include:
   - ./docker/builder/docker-compose.yml
+  - ./docker/nginx/docker-compose.yml

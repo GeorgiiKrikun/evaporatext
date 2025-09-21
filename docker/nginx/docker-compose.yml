@@ -1,0 +1,37 @@
+services:
+
+  nginx-dev:
+    container_name: evaporate-nginx-dev
+    image: nginx:alpine
+    tty: true
+    ports:
+      - "8080:80"
+    volumes:
+      - ../../build/dx/evaporate/release/web/public/:/static-files/:ro
+      - ./configs/local-dev/:/etc/nginx/conf.d/:ro
+    restart: always
+
+  # nginx:
+  #   container_name: text-anon-nginx
+  #   image: nginx:alpine
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     # - static-files:/static-files/:ro
+  #     - ./nginx/conf/:/etc/nginx/conf.d/:ro
+  #     - ./certbot/www:/var/www/certbot/:ro
+  #     - ./certbot/conf/:/etc/nginx/ssl/:ro
+  #   restart: always
+  #
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+  certbot-test:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+    entrypoint: sh -c "while true; do echo 'This is an infinite loop';sleep 5; done"
