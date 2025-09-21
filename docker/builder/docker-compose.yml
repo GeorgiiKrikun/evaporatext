@@ -12,6 +12,10 @@ services:
     command: ["bundle", "--release", "--platform", "web"]
     volumes:
       - ../../build:/app/target/
+    deploy:
+      resources:
+        limits:
+          cpus: "0.9"
 
   wbdbg:
     image: evaporate-builder

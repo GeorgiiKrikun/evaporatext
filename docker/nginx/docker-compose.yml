@@ -10,6 +10,10 @@ services:
       - ../../build/dx/evaporate/release/web/public/:/static-files/:ro
       - ./configs/local-dev/:/etc/nginx/conf.d/:ro
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.9"
 
   # nginx:
   #   container_name: text-anon-nginx
